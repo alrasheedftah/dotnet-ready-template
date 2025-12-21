@@ -1,0 +1,44 @@
+using System.Diagnostics;
+using Application.Shared.Messaging;
+using Application.Shared.Pipeline;
+using Microsoft.Extensions.Logging;
+
+namespace Application.Behaviors.Logging;
+
+public sealed class QueryLoggingBehvior<TQuery, TResponse> : IQueryPipelineBehavior<TQuery, TResponse>
+    where TQuery : IQuery<TResponse>
+{
+
+    private ILogger<QueryLoggingBehvior<TQuery, TResponse>> _logger;
+
+    public QueryLoggingBehvior(ILogger<QueryLoggingBehvior<TQuery, TResponse>> logger)
+        => _logger = logger;
+
+    public async Task<TResponse> Handle(TQuery query, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
+    {
+        var queryName = typeof(TQuery).Name;
+
+        _logger.LogDebug("Handling query {QueryName}", queryName);
+        var sw = Stopwatch.StartNew();
+        try
+        {
+            var response = await next(ct);
+            sw.Stop();
+            _logger.LogInformation(
+                "Handled Query {QueryName} in {ElapsedMs} ms",
+                queryName,
+                sw.ElapsedMilliseconds);
+            
+            return response;
+        }catch(Exception ex)
+        {
+            sw.Stop();
+            _logger.LogError(
+                ex,
+                "Query {QueryName} failed after {ElapsedMs} ms",
+                queryName,
+                sw.ElapsedMilliseconds);
+            throw;
+        }
+    }
+}
