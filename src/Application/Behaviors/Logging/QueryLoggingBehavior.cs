@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Behaviors.Logging;
 
-public sealed class QueryLoggingBehvior<TQuery, TResponse> : IQueryPipelineBehavior<TQuery, TResponse>
+public sealed class QueryLoggingBehvior<TQuery, TResponse> : IQueryPipelineBehavior<TQuery, TResponse>, IOrderedBehavior
     where TQuery : IQuery<TResponse>
 {
 
@@ -13,6 +13,8 @@ public sealed class QueryLoggingBehvior<TQuery, TResponse> : IQueryPipelineBehav
 
     public QueryLoggingBehvior(ILogger<QueryLoggingBehvior<TQuery, TResponse>> logger)
         => _logger = logger;
+
+    public int Order => BehaviorOrder.Logging;
 
     public async Task<TResponse> Handle(TQuery query, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {

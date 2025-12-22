@@ -20,7 +20,15 @@ public sealed class Dispatcher : IDispatcher
         var handler = sp.GetRequiredService<ICommandHandler<TCommand, TResponse>>();
         RequestHandlerDelegate<TResponse> next = innerCt => handler.Handle(command, innerCt);
 
-        foreach (var behavior in sp.GetServices<ICommandPipelineBehavior<TCommand, TResponse>>().Reverse())
+        var behaviors = sp.GetServices<ICommandPipelineBehavior<TCommand, TResponse>>();
+
+        var ordered = behaviors
+            .Select(b => (Behavior: b, Order: (b as IOrderedBehavior)?.Order ?? int.MaxValue))
+            .OrderBy(x => x.Order)
+            .Select(x => x.Behavior)
+            .ToList();
+
+        foreach (var behavior in ordered.Reverse<ICommandPipelineBehavior<TCommand, TResponse>>())
         {
             var current = next;
             next = innerCt => behavior.Handle(command, current, innerCt);

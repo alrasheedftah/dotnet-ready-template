@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace Application.Behaviors.Logging;
 
 public sealed class CommandLoggingBehavior<TCommand, TResponse>
-    : ICommandPipelineBehavior<TCommand, TResponse>
+    : ICommandPipelineBehavior<TCommand, TResponse>, IOrderedBehavior
     where TCommand : IBaseCommand
 {
 
@@ -14,6 +14,8 @@ public sealed class CommandLoggingBehavior<TCommand, TResponse>
 
     public CommandLoggingBehavior(ILogger<CommandLoggingBehavior<TCommand, TResponse>> logger)
         => _logger = logger;
+
+    public int Order => BehaviorOrder.Logging;
 
     public async Task<TResponse> Handle(TCommand command, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {
