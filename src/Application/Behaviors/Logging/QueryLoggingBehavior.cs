@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Behaviors.Logging;
 
-public sealed class QueryLoggingBehvior<TQuery, TResponse> : IQueryPipelineBehavior<TQuery, TResponse>, IOrderedBehavior
+public sealed class QueryLoggingBehavior<TQuery, TResponse> : IQueryPipelineBehavior<TQuery, TResponse>, IOrderedBehavior
     where TQuery : IQuery<TResponse>
 {
 
-    private ILogger<QueryLoggingBehvior<TQuery, TResponse>> _logger;
+    private ILogger<QueryLoggingBehavior<TQuery, TResponse>> _logger;
 
-    public QueryLoggingBehvior(ILogger<QueryLoggingBehvior<TQuery, TResponse>> logger)
+    public QueryLoggingBehavior(ILogger<QueryLoggingBehavior<TQuery, TResponse>> logger)
         => _logger = logger;
 
     public int Order => BehaviorOrder.Logging;

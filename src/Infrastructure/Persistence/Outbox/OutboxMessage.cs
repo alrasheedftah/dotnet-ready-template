@@ -3,7 +3,7 @@ namespace Infrastructure.Persistence.Outbox;
 public sealed class OutboxMessage
 {
     public Guid Id { get; set; }
-    public string Type { get; set; } = default!;
+    public string EventName { get; set; } = default!;
     public string PayloadJson { get; set; } = default!;
     public DateTime OccurredAtUtc { get; set; }
 
@@ -13,4 +13,8 @@ public sealed class OutboxMessage
     public int Attempts { get; set; }
     public DateTime? NextAttemptAtUtc { get; set; }
     public string? LastError { get; set; }
+
+    // for scale-out safety
+    public string? LockedBy { get; set; }
+    public DateTime? LockedUntilUtc { get; set; }    
 }

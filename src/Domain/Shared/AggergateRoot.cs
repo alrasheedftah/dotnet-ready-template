@@ -1,6 +1,6 @@
 namespace Domain.Shared;
 
-public abstract class AggregateRoot<TId> : Entity<TId>
+public abstract class AggregateRoot<TId> : Entity<TId>, IHaveDomainEvents
 {
     private readonly List<IDomainEvent> _events = new();
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _events.AsReadOnly();

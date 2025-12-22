@@ -12,3 +12,9 @@ public abstract record DomainEvent : IDomainEvent
     // domain may receive it from outside
     public DateTime OccurredAtUtc { get; init; } = DateTime.UtcNow;
 }
+
+public interface IHaveDomainEvents
+{
+    IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
+    void ClearDomainEvents();
+}

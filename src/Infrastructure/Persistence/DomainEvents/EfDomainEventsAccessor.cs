@@ -27,11 +27,4 @@ public sealed class EfDomainEventsAccessor : IDomainEventsAccessor
 
         return events;
     }
-
-    // Small adapter interface so we can detect aggregates generically
-    public interface IHaveDomainEvents
-    {
-        IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
-        void ClearDomainEvents();
-    }
 }

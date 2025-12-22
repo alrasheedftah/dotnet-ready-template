@@ -37,7 +37,7 @@ public sealed class OutboxBehavior<TCommand, TResponse>
         // save will be done in uow behavior last ordering in pipeline
         foreach (var de in domainEvents)
         foreach (var ie in _mapper.Map(de))
-            await _outbox.AddAsync(ie, de.OccurredAtUtc, ct);
+            await _outbox.AddAsync(ie, ct);
 
         return response;
     }

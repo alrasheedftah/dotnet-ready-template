@@ -1,0 +1,6 @@
+@Api_HostAddress = http://localhost:5002
+
+GET {{Api_HostAddress}}/ping/
+Accept: application/json
+
+###

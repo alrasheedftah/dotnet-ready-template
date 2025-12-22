@@ -12,7 +12,7 @@ public sealed class OutboxMessageConfiguration : IEntityTypeConfiguration<Outbox
 
         b.HasKey(x => x.Id);
 
-        b.Property(x => x.Type).HasMaxLength(300).IsRequired();
+        b.Property(x => x.EventName).HasMaxLength(300).IsRequired();
         b.Property(x => x.PayloadJson).IsRequired();
 
         b.HasIndex(x => x.PublishedAtUtc);

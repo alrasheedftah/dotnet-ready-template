@@ -9,8 +9,10 @@ public interface IOutboxReader
 
 public sealed record OutboxEnvelope(
     Guid Id,
-    string Type,
+    string Name,
     string PayloadJson,
     DateTime OccurredAtUtc,
-    int Attempts
+    int Attempts,
+    string? Key = null,
+    IReadOnlyDictionary<string, string>? Headers = null    
 );
