@@ -1,4 +1,4 @@
-using Application.Shared.Messaging;
+using Application.Messaging.Messaging;
 using Application.Shared.Persistence;
 using System.Text.Json;
 
@@ -10,16 +10,17 @@ public sealed class EfOutbox : IOutbox
 
     public EfOutbox(AppDbContext db) => _db = db;
 
-    public Task AddAsync(IIntegrationEvent @event, CancellationToken ct)
+    public Task AddAsync(ExternalMessage message, CancellationToken ct)
     {
-        var type = @event.EventName;
-
         var msg = new OutboxMessage
         {
-            Id = Guid.NewGuid(),
-            EventName = type,
-            PayloadJson = JsonSerializer.Serialize(@event, @event.GetType()),
-            OccurredAtUtc = @event.OccurredAtUtc,
+            Id = message.MessageId ?? Guid.NewGuid(),
+            EventName = message.Name,
+            PayloadJson = message.PayloadJson,
+            HeadersJson = message.Headers is null
+                ? null
+                : JsonSerializer.Serialize(message.Headers),
+            OccurredAtUtc = DateTime.UtcNow,
             CreatedAtUtc = DateTime.UtcNow,
             Attempts = 0
         };

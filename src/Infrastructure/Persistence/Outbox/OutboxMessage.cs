@@ -5,6 +5,7 @@ public sealed class OutboxMessage
     public Guid Id { get; set; }
     public string EventName { get; set; } = default!;
     public string PayloadJson { get; set; } = default!;
+    public string? HeadersJson { get; set; }
     public DateTime OccurredAtUtc { get; set; }
 
     public DateTime CreatedAtUtc { get; set; }

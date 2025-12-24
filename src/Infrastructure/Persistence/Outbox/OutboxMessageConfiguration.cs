@@ -14,6 +14,7 @@ public sealed class OutboxMessageConfiguration : IEntityTypeConfiguration<Outbox
 
         b.Property(x => x.EventName).HasMaxLength(300).IsRequired();
         b.Property(x => x.PayloadJson).IsRequired();
+        b.Property(x => x.HeadersJson);
 
         b.HasIndex(x => x.PublishedAtUtc);
         b.HasIndex(x => x.NextAttemptAtUtc);
